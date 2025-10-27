@@ -14,7 +14,7 @@ function loop() {
 
   window.requestAnimationFrame(loop);
 }
-dsadsa
+
 // Setup is run once, at the start of the program. It sets everything up for us!
 function setup() {
   // Put your event listener code here
