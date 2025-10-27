@@ -23,3 +23,5 @@ function setup() {
 }
 
 setup(); // Always remember to call setup()!
+x = 1
+console.log(x) 
