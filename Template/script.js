@@ -24,18 +24,10 @@ hue:60,
 };
 const lineofdeath ={
 hue:90,
-
-}
+};
 
 
 function bigSun(){  
-  
-// Pallets/ bullets
-Util.setPositionPixels(50,100,Mini )  
-Util.setSize(30,30,Mini);
-Util.setColour(Moon.hue,Sun.saturation,Sun.lightness,Sun.alpha,Mini);//using the differnt hue but the same sat light and alpha as the sun
-
-  
 // Big Sun aka the bunker
 Util.setColour(Sun.hue,Sun.saturation,Sun.lightness,Sun.alpha,Big);
 Util.setRoundedness(0,Big);
@@ -45,7 +37,7 @@ Util.setPositionPixels(50,500,Big);
 Util.setColour(star.hue,Sun.saturation,Sun.lightness,Sun.alpha,Star);
 Util.setSize(89,10,Star);
 
-}
+};
 bigSun();
 
 
@@ -59,6 +51,15 @@ Util.setRoundedness(0,line)
 
 lineOfDeath();
 // ...existing code...
+
+function Pallets(){
+// Pallets/ bullets
+Util.setPositionPixels(50,100,Mini )  
+Util.setSize(20,20,Mini);
+Util.setColour(Moon.hue,Sun.saturation,Sun.lightness,Sun.alpha,Mini);//using the differnt hue but the same sat light and alpha as the sun
+
+};
+Pallets();
 
 
 
