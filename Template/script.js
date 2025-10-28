@@ -2,9 +2,37 @@
  * IDB Programming: Code Playground
  *
  */
-
+//creating a tower and pellets
 import * as Util from "./util.js";
+let Big=Util.createThing("moon");
+let Mini=Util.createThing("sun");
+//tower
 
+
+//pellets
+
+
+
+
+
+function bigSun()
+{
+
+
+
+
+Util.setPositionPixels(50,100,Mini )  
+Util.setSize(30,30,Mini);
+
+Util.setColour(122,100,50,1,Big);
+Util.setRoundedness(0,Big);
+Util.setPositionPixels(100,100,Big);
+
+
+
+
+}
+bigSun();
 // State variables are the parts of your program that change over time.
 
 // Settings variables should contain all of the "fixed" parts of your programs
