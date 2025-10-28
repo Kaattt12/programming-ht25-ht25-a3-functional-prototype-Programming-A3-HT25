@@ -4,27 +4,34 @@
  */
 //creating a tower and pellets
 import * as Util from "./util.js";
-let Big=Util.createThing("moon");
-let Mini=Util.createThing("sun");
-//tower
-
-
-//pellets
+let Big=Util.createThing("moon");//tower
+let Mini=Util.createThing("sun");//pellets
 
 
 
+const Sun ={//object of the sun/ aka the bunker
+  hue:122,
+  saturation:100,
+  lightness:50,
+  alpha:1,
+
+};
+const Moon ={
+hue:20,
+};
 
 
-function bigSun()
-{
 
 
-
-
+function bigSun(){  
+  
+// Pallets/ bullets
 Util.setPositionPixels(50,100,Mini )  
 Util.setSize(30,30,Mini);
+Util.setColour(Moon.hue,Sun.saturation,Sun.lightness,Sun.alpha,Mini);//using the differnt hue but the same sat light and alpha as the sun
 
-Util.setColour(122,100,50,1,Big);
+// Big Sun aka the bunker
+Util.setColour(Sun.hue,Sun.saturation,Sun.lightness,Sun.alpha,Big);
 Util.setRoundedness(0,Big);
 Util.setPositionPixels(100,100,Big);
 
@@ -33,6 +40,10 @@ Util.setPositionPixels(100,100,Big);
 
 }
 bigSun();
+
+
+
+
 // State variables are the parts of your program that change over time.
 
 // Settings variables should contain all of the "fixed" parts of your programs
