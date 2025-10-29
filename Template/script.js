@@ -14,7 +14,7 @@ const Sun ={//object of the sun/ aka the bunker
   saturation:100,
   lightness:50,
   alpha:1,
- pixelx:50,
+ pixelx:50, 
  pixely:500,
 };
 const Moon ={
@@ -44,7 +44,8 @@ star.pixely+=1;
 if (star.pixely > lineofdeath.y) { // 500 is where the green line is
     Util.setPositionPixels(star.pixelx, star.pixely, Star);
     star.stopp=true;
-  }
+  } if (star.pixely> lineofdeath.y){ window.alert("game over")} // somehow it is made;when the ball crosses the green line it shows alert  
+  
   };
 
 function bigSun(){  
@@ -70,7 +71,7 @@ line.style.width = "100%";
 
 };
 function box(){
-  window.alert("box")
+  window.alert("Start?")
 }
 box();  
 
