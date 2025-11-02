@@ -24,9 +24,22 @@ const Sun ={//object of the sun/ aka the bunker
   alpha:1,
  pixelx:50, 
  pixely:500,
-stopp:false,
+ pixelwidth:50,
+ pixelheight:50,
+ stopp:false,
+moveleft(){
+if(this.pixelx<50){
+this.pixelx=50}
+else{
+this.pixelx-=5;
+}},
+moveright(){
+if(this.pixelx+this.pixelwidth>=screen.width){
+this.pixelx=screen.width-this.pixelwidth}
+else{
+this.pixelx+=5;
+}},
 };
-
 let shoot=false;
 const Moon ={//pallets
 hue:20,};
@@ -100,6 +113,7 @@ function bigSun(){// Big Sun aka the bunker
 Util.setColour(Sun.hue,Sun.saturation,Sun.lightness,Sun.alpha,Big);
 Util.setRoundedness(0,Big);
 Util.setPositionPixels(Sun.pixelx,Sun.pixely,Big);
+Util.setSize(Sun.pixelwidth,Sun.pixelheight,Big)
 };
 
 function lineOfDeath(){//green line with a 
@@ -164,17 +178,19 @@ Util.setPositionPixels(Sun.pixelx, Sun.pixely, Mini) // Negative value moves up,
   //if(Sun.stopp) {Util.setPositionPixels(Sun.pixelx, Sun.pixely, Mini);}  
      //if(shoot===true){};
 };
-// function drawBunker(){
+
+function drawBunker(){
+bigSun();
 
 
 
 
-//   setTimeout(() => {
+  setTimeout(() => {
  
-//   requestAnimationFrame();
+  requestAnimationFrame(drawBunker);
  
-// }, 150);;
-//   };
+}, 150);;
+};
 
 
 
@@ -210,7 +226,14 @@ function setup() {
 if(event.code==="KeyG"){
   shoot=true;
    drawPallets();
-} 
+}else if(event.code==="KeyD"){
+Sun.moveright()
+bigSun();
+}else if(event.code==="KeyA"){
+Sun.moveleft()
+bigSun();
+}
+
 })
  window.addEventListener("keyup", (event)=>{
  if(event.code==="KeyG"){
