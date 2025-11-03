@@ -9,27 +9,36 @@ let Big=Util.createThing("moon");//tower
 let Mini=Util.createThing("sun");//pellets
 let Star =Util.createThing("star");//star
 let line = Util.createThing("line");//line
-
+let EnemyTwo =Util.createThing("star");//star
 let id = 0;
 
-
+let prevKey = null;
+let currKey = null;
 const allKeys = ["KeyZ"  ,"KeyX"  ,"KeyC"  ,"KeyV"  ,"KeyB"  ,"KeyN"  ,"KeyM"];
-const currentKeys = []
-let bunkerPositionIndex = 0;
+
+
+
+
 const bunkerposition = [50,150,250,350,]
+
+
+
+
+
+
 const Sun ={//object of the sun/ aka the bunker
-  hue:122,
-  saturation:100,
-  lightness:50,
-  alpha:1,
- pixelx:50, 
+hue:122,
+saturation:100,
+lightness:50,
+alpha:1,
+ pixelx:0, 
  pixely:500,
  pixelwidth:50,
  pixelheight:50,
  stopp:false,
 moveleft(){
-if(this.pixelx<50){
-this.pixelx=50}
+if(this.pixelx<0){
+this.pixelx=0}
 else{
 this.pixelx-=5;
 }},
@@ -41,13 +50,38 @@ this.pixelx+=5;
 }},
 };
 let shoot=false;
+
+
+function checkCollision(domElement1, domElement2) {
+  const rect1 = domElement1.getBoundingClientRect();
+  const rect2 = domElement2.getBoundingClientRect();
+
+  // Check for overlap on all four sides
+  return !(
+    rect1.bottom < rect2.top || // 1 is above 2
+    rect1.top > rect2.bottom || // 1 is below 2
+    rect1.right < rect2.left || // 1 is left of 2
+    rect1.left > rect2.right    // 1 is right of 2
+  );
+}
+
+
 const Moon ={//pallets
-hue:20,};
+hue:20,
+pixelx: 0,
+pixely: 0,
+};
 
 const star ={//star enemies
 hue:60,
 pixely:1,
 pixelx:200,
+
+};
+const starTwo ={//star enemies
+hue:60,
+pixely:1,
+pixelx:100,
 
 };
 const lineofdeath ={//green line of death
@@ -56,7 +90,6 @@ hue:90,
  y: 500,
 stopp:false,
 };
-
 
 
 function compareKeys(key1,key2){
@@ -92,6 +125,7 @@ Util.setPositionPixels(star.pixelx,star.pixely,Star);
 star.pixely+=1;
 if (star.pixely > lineofdeath.y) { // 500 is where the green line is
     star.stopp=true;
+    Util.setColour(250,50,50,1,Star)
   }; 
   //game over box if you want it. 
   //if (star.pixely> lineofdeath.y){ window.alert("game over")} // somehow it is made;when the ball crosses the green line it shows alert  
@@ -100,14 +134,31 @@ setTimeout(() => {
   window.requestAnimationFrame(StarEnemies);
  
 }, 15);;
-
-
-
-
-
-
-
 };
+
+function StarEnemeytwo(){
+if(starTwo.stopp) return;
+Util.setColour(star.hue,Sun.saturation,Sun.lightness,Sun.alpha,EnemyTwo);
+Util.setRoundedness(1,EnemyTwo)
+Util.setSize(80,70,EnemyTwo);
+Util.setPositionPixels(starTwo.pixelx,starTwo.pixely,EnemyTwo);
+starTwo.pixely+=1;
+if (starTwo.pixely > lineofdeath.y) { // 500 is where the green line is
+    starTwo.stopp=true;
+    Util.setColour(250,50,50,1,EnemyTwo)//your lose
+  }; 
+  //game over box if you want it. 
+  //if (star.pixely> lineofdeath.y){ window.alert("game over")} // somehow it is made;when the ball crosses the green line it shows alert  
+setTimeout(() => {
+ 
+  window.requestAnimationFrame(StarEnemeytwo);
+ 
+}, 12);;
+};
+
+
+
+
 
 function bigSun(){// Big Sun aka the bunker
 Util.setColour(Sun.hue,Sun.saturation,Sun.lightness,Sun.alpha,Big);
@@ -135,8 +186,8 @@ Util.setColour(Moon.hue,Sun.saturation,Sun.lightness,Sun.alpha,Mini);//using the
 bigSun();
 Pallets();
 lineOfDeath();
+StarEnemeytwo();
 // ...existing code...?
-
 
 //shite
 // function moveSun(){
@@ -154,19 +205,36 @@ lineOfDeath();
 
 function drawPallets(){//drawPallets
   if(shoot==false){
- return;
-}
-  if (Sun.pixely < 42) {
-  Sun.pixely = 500;
+ return;} 
+if (checkCollision(Mini, Star,)) {
+    console.log("HIT! Stopping Star and Bullet.");
+    star.stopp = true;
+    Util.setColour(0,20,20,1,Star)
+  }
+  if (Moon.pixely < 42) {
+  Moon.pixely = 500;
   shoot=false; 
-  Util.setPositionPixels(Sun.pixelx, Sun.pixely, Mini);
-} 
-  else{
-    Sun.pixely-=42;
-Util.setPositionPixels(Sun.pixelx, Sun.pixely, Mini) // Negative value moves up, positive moves down
+  Util.setPositionPixels(Moon.pixelx, Moon.pixely, Mini);
+}   
+  
+if (checkCollision(Mini, EnemyTwo)) {
+    console.log("HIT! EnemyTwo and Bullet.");
+    starTwo.stopp = true; // Stop the movement of the second enemy
+    // Set color to black/dark gray to make it "disappear"
+    Util.setColour(0, 0, 10, 1, EnemyTwo); 
+
+    // Reset the bullet
+    Moon.pixely = 500;
+    shoot = false; 
+    Util.setPositionPixels(Moon.pixelx, Moon.pixely, Mini);
+    return; // Stop bullet movement and exit this frame
+}else{
+  Moon.pixely-=42;
+Util.setPositionPixels(Moon.pixelx, Moon.pixely, Mini) // Negative value moves up, positive moves down
   };
-  setTimeout(() => {
  
+  setTimeout(() => {
+   
   window.requestAnimationFrame(drawPallets);
  
 }, 150);;
@@ -179,26 +247,6 @@ Util.setPositionPixels(Sun.pixelx, Sun.pixely, Mini) // Negative value moves up,
      //if(shoot===true){};
 };
 
-function drawBunker(){
-bigSun();
-
-
-
-
-  setTimeout(() => {
- 
-  requestAnimationFrame(drawBunker);
- 
-}, 150);;
-};
-
-
-
-
-
-
-
-
 
 // not working now 
 
@@ -210,10 +258,10 @@ bigSun();
 function loop(){
 StarEnemies(); 
 drawPallets();  
-//drawBunker();
 
-console.log(shoot)
- 
+swipeDirection()
+console.log(shoot)//false or true :P
+StarEnemeytwo();
 
 };
 
@@ -223,9 +271,11 @@ function setup() {
  
  
   window.addEventListener("keydown", (event)=>{
-if(event.code==="KeyG"){
+ if(event.code==="KeyG"){
   shoot=true;
-   drawPallets();
+  Moon.pixelx = Sun.pixelx; 
+  Moon.pixely = Sun.pixely; 
+  drawPallets();
 }else if(event.code==="KeyD"){
 Sun.moveright()
 bigSun();
@@ -237,37 +287,11 @@ bigSun();
 })
  window.addEventListener("keyup", (event)=>{
  if(event.code==="KeyG"){
-  //shoot=false;
+  
  } 
  });//an anonymys function which takes the value the of the key as a parameter ~DANIEL
  window.requestAnimationFrame(loop);
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 setup(); // Always remember to call setup()!
 let x = 1
