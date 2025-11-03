@@ -12,10 +12,42 @@ let line = Util.createThing("line");//line
 let EnemyTwo =Util.createThing("star");//star
 let id = 0;
 
-let prevKey = null;
-let currKey = null;
+let lastkeydownIdx=-1
+const noneDirection =-1;
+const leftDirection = 0;
+const rightDirection =1;
 const allKeys = ["KeyZ"  ,"KeyX"  ,"KeyC"  ,"KeyV"  ,"KeyB"  ,"KeyN"  ,"KeyM"];
 
+function selectDirection(KeyCode){
+
+  const KeyIndex = allKeys.indexOf(KeyCode);
+
+if(KeyIndex===-1){
+return noneDirection;  
+}
+
+if(lastkeydownIdx<0){
+lastkeydownIdx=KeyIndex;
+return noneDirection;
+}
+
+if(lastkeydownIdx>KeyIndex){
+lastkeydownIdx=KeyIndex;
+  return leftDirection;
+
+}else if(lastkeydownIdx<KeyIndex){
+  lastkeydownIdx=KeyIndex;
+  return rightDirection;
+}
+else
+{
+return noneDirection;
+}
+
+
+
+
+}
 
 
 
@@ -92,27 +124,6 @@ stopp:false,
 };
 
 
-function compareKeys(key1,key2){
-if (allKeys.indexOf(key1) - allKeys.indexOf(key2) === 1){
-  console.log("were going left");
-  return (1)
-}else if (allKeys.indexOf(key1) - allKeys.indexOf(key2) === -1){
-  console.log("were going right");
-  return (-1)
-}
-};
-
-compareKeys("KeyZ","KeyX")//argument
-
-document.addEventListener("keydown", (event)=>{
-  if (Math.abs(compareKeys(currentKeys[0],currentKeys[1]))===1){
-    window.clearTimeout(id);
-  }
-})
-
-document.addEventListener("keyup", (event)=>{
-id = window.setTimeout(/stopscroll()/,1000);
-});
 
 
 
@@ -267,27 +278,35 @@ StarEnemeytwo();
 
 // Setup is run once, at the start of the program. It sets everything up for us!
 function setup() {
-  // Put your event listener code here
- 
- 
   window.addEventListener("keydown", (event)=>{
- if(event.code==="KeyG"){
-  shoot=true;
-  Moon.pixelx = Sun.pixelx; 
-  Moon.pixely = Sun.pixely; 
-  drawPallets();
-}else if(event.code==="KeyD"){
+ if(event.code==="KeyG"&&shoot===false){
+ 
+  
+}else{
+
+const direction=selectDirection(event.code)  
+
+if(direction===rightDirection){
 Sun.moveright()
 bigSun();
-}else if(event.code==="KeyA"){
+}else if(direction===leftDirection){
 Sun.moveleft()
 bigSun();
 }
 
+
+
+}
+  
+ 
 })
  window.addEventListener("keyup", (event)=>{
- if(event.code==="KeyG"){
+ if(event.code==="KeyG" && shoot===false){
+  shoot=true;
+  Moon.pixelx = Sun.pixelx+ (Sun.pixelwidth / 2) - 10; 
+  Moon.pixely = Sun.pixely; 
   
+  drawPallets();
  } 
  });//an anonymys function which takes the value the of the key as a parameter ~DANIEL
  window.requestAnimationFrame(loop);
