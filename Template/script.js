@@ -7,13 +7,12 @@
  */
 //creating a tower and pellets
 import * as Util from "./util.js";
-//this probobly could be done better with arrays/ object but im lazy and or uneducated :P
+
 let Big = Util.createThing("moon");//tower
 let Mini = Util.createThing("sun");//pellets
 let Star = Util.createThing("star");//star
 let line = Util.createThing("line");//line
 let EnemyTwo = Util.createThing("star");//star
-
 
 let lastkeydownIdx = -1
 const noneDirection = -1;
@@ -23,6 +22,7 @@ const allKeys = [ "KeyZ", "KeyX", "KeyC", "KeyV", "KeyB", "KeyN", "KeyM" ];
 
 function selectDirection(KeyCode) {
   function indexof(theArr, KeyCode) {
+    // for loop or while loop or their functional equivalent (i.e. the forEach() Links to an external site. method call)
     for (let i = 0; i < theArr.length; i++) {
       if (theArr[ i ] === KeyCode) {
         return i;
@@ -34,6 +34,7 @@ function selectDirection(KeyCode) {
   }
 
   //const KeyIndex = allKeys.indexOf(KeyCode);
+
   const KeyIndex = indexof(allKeys, KeyCode);
   if (KeyIndex === -1) {
     return noneDirection;
@@ -61,9 +62,6 @@ function selectDirection(KeyCode) {
 
 }
 
-
-
-const bunkerposition = [ 50, 150, 250, 350, ]
 
 
 
@@ -158,7 +156,7 @@ function StarEnemies() {// Star enemeies
     star.stopp = true;
     Util.setColour(250, 50, 50, 1, Star)
   };
-  //game over box if you want it. 
+
   //if (star.pixely> lineofdeath.y){ window.alert("game over")} // somehow it is made;when the ball crosses the green line it shows alert  
   setTimeout(() => {
 
@@ -178,7 +176,7 @@ function StarEnemeytwo() {
     starTwo.stopp = true;
     Util.setColour(250, 50, 50, 1, EnemyTwo)//your lose
   };
-  //game over box if you want it. 
+
   //if (star.pixely> lineofdeath.y){ window.alert("game over")} // somehow it is made;when the ball crosses the green line it shows alert  
   setTimeout(() => {
 
@@ -213,12 +211,10 @@ function Pallets() {// Pallets/ bullets
 
 
 };
-// array for the movement/ pressing keys all of them to move through each position, shooting with a holding to make bigger and the small as samll damage.
 bigSun();
 Pallets();
 lineOfDeath();
 StarEnemeytwo();
-// ...existing code...?
 
 function drawPallets() {//drawPallets
   if (shoot == false) {
@@ -237,7 +233,7 @@ function drawPallets() {//drawPallets
 
   if (checkCollision(Mini, EnemyTwo)) {
     console.log("HIT! EnemyTwo and Bullet.");
-    starTwo.stopp = true; // Stop the movement of the second enemy
+    starTwo.stopp = true; // Stop the movement of the enemy
     // Set color to black/dark gray to make it "disappear"
     Util.setColour(0, 0, 10, 1, EnemyTwo);
 
@@ -266,25 +262,35 @@ function drawPallets() {//drawPallets
 };
 
 
-// not working now 
 
-// State variables are the parts of your program that change over time.
-
-// Settings variables should contain all of the "fixed" parts of your programs
-
-// Code that runs over and over again
 function loop() {
   StarEnemies();
   drawPallets();
-
-  //swipeDirection()
-  console.log(shoot)//false or true :P
+  //console.log(shoot)
   StarEnemeytwo();
 
 };
 
-// Setup is run once, at the start of the program. It sets everything up for us!
+
 let repeatedKeyG = false;
+function keyupHandler(event) {
+  if (event.code === "KeyG" && shoot === false) {
+    shoot = true;
+    if (repeatedKeyG) {
+
+      Util.setSize(Moon.px + Moon.deltaSize, Moon.py + Moon.deltaSize, Mini);
+    } else {
+      Util.setSize(Moon.px, Moon.py, Mini);
+
+    }
+
+    Moon.pixelx = Sun.pixelx + (Sun.pixelwidth / 2) - 10;
+    Moon.pixely = Sun.pixely;
+
+    drawPallets();
+  }
+
+}
 function setup() {
   window.addEventListener("keydown", (event) => {
     if (event.code === "KeyG") {
@@ -307,34 +313,16 @@ function setup() {
 
     }
 
-    console.log(event.repeat);
+    //console.log(event.repeat);
   })
 
-  window.addEventListener("keyup", (event) => {
-    if (event.code === "KeyG" && shoot === false) {
-      shoot = true;
-      if (repeatedKeyG) {
-
-        Util.setSize(Moon.px + Moon.deltaSize, Moon.py + Moon.deltaSize, Mini);
-      } else {
-        Util.setSize(Moon.px, Moon.py, Mini);
-
-      }
-
-      Moon.pixelx = Sun.pixelx + (Sun.pixelwidth / 2) - 10;
-      Moon.pixely = Sun.pixely;
-
-      drawPallets();
-    }
-
-  });//an anonymys function which takes the value the of the key as a parameter ~DANIEL
+  window.addEventListener("keyup", keyupHandler);
 
   window.requestAnimationFrame(loop);
 };
 
 setup(); // Always remember to call setup()!
-let x = 1
-console.log(x)
+
 
 
 
