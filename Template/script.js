@@ -1,6 +1,9 @@
 /*
  * IDB Programming: Code Playground
- *
+ *to play the game you use the keys from z to m to move
+ hold g to shoot and shoot at the yellow balls. 
+ if blue balls u lost 
+ if black or darker color that means u won.
  */
 //creating a tower and pellets
 import * as Util from "./util.js";
@@ -82,7 +85,7 @@ const Sun = {//object of the sun/ aka the bunker
       this.pixelx = 0
     }
     else {
-      this.pixelx -= 5;
+      this.pixelx -= 20;
     }
   },
   moveright() {
@@ -90,7 +93,7 @@ const Sun = {//object of the sun/ aka the bunker
       this.pixelx = screen.width - this.pixelwidth
     }
     else {
-      this.pixelx += 5;
+      this.pixelx += 20;
     }
   },
 };
@@ -115,13 +118,17 @@ const Moon = {//pallets
   hue: 20,
   pixelx: 0,
   pixely: 0,
+  px: 20,
+  py: 20,
+  deltaSize: 10,
 };
 
 const star = {//star enemies
   hue: 60,
   pixely: 1,
   pixelx: 200,
-
+  px: 80,
+  py: 70,
 };
 const starTwo = {//star enemies
   hue: 60,
@@ -164,7 +171,7 @@ function StarEnemeytwo() {
   if (starTwo.stopp) return;
   Util.setColour(star.hue, Sun.saturation, Sun.lightness, Sun.alpha, EnemyTwo);
   Util.setRoundedness(1, EnemyTwo)
-  Util.setSize(80, 70, EnemyTwo);
+  Util.setSize(star.px, star.py, EnemyTwo);
   Util.setPositionPixels(starTwo.pixelx, starTwo.pixely, EnemyTwo);
   starTwo.pixely += 1;
   if (starTwo.pixely > lineofdeath.y) { // 500 is where the green line is
@@ -191,7 +198,7 @@ function bigSun() {// Big Sun aka the bunker
   Util.setSize(Sun.pixelwidth, Sun.pixelheight, Big)
 };
 
-function lineOfDeath() {//green line with a 
+function lineOfDeath() {
   Util.setColour(lineofdeath.hue, 50, 50, 1, line)
   Util.setSize(screen.width - lineofdeath.x, 10, line);
   Util.setPositionPixels(lineofdeath.x, lineofdeath.y, line);
@@ -201,7 +208,7 @@ function lineOfDeath() {//green line with a
 };
 
 function Pallets() {// Pallets/ bullets  
-  Util.setSize(20, 20, Mini);
+  Util.setSize(Moon.px, Moon.py, Mini);
   Util.setColour(Moon.hue, Sun.saturation, Sun.lightness, Sun.alpha, Mini);//using the differnt hue but the same sat light and alpha as the sun
 
 
@@ -212,20 +219,6 @@ Pallets();
 lineOfDeath();
 StarEnemeytwo();
 // ...existing code...?
-
-//shite
-// function moveSun(){
-
-
-//   document.addEventListener("keydown", (event) => {
-//     if (event.code == "KeyB" && !event.repeat) {
-//       console.log(`Key Down - Code ${event.code} | Keycode ${event.keyCode} | Key ${event.key} | Repeat ${event.repeat ? '' : 'not'}`);
-
-
-//     }
-//   });
-// };
-// moveSun();
 
 function drawPallets() {//drawPallets
   if (shoot == false) {
@@ -284,16 +277,20 @@ function loop() {
   StarEnemies();
   drawPallets();
 
-  swipeDirection()
+  //swipeDirection()
   console.log(shoot)//false or true :P
   StarEnemeytwo();
 
 };
 
 // Setup is run once, at the start of the program. It sets everything up for us!
+let repeatedKeyG = false;
 function setup() {
   window.addEventListener("keydown", (event) => {
-    if (event.code === "KeyG" && shoot === false) {
+    if (event.code === "KeyG") {
+      repeatedKeyG = event.repeat;
+
+
     } else {
 
       const direction = selectDirection(event.code)
@@ -310,19 +307,28 @@ function setup() {
 
     }
 
-
+    console.log(event.repeat);
   })
-  
+
   window.addEventListener("keyup", (event) => {
-     if (event.code === "KeyG" && shoot === false) {
+    if (event.code === "KeyG" && shoot === false) {
       shoot = true;
+      if (repeatedKeyG) {
+
+        Util.setSize(Moon.px + Moon.deltaSize, Moon.py + Moon.deltaSize, Mini);
+      } else {
+        Util.setSize(Moon.px, Moon.py, Mini);
+
+      }
+
       Moon.pixelx = Sun.pixelx + (Sun.pixelwidth / 2) - 10;
       Moon.pixely = Sun.pixely;
 
       drawPallets();
     }
+
   });//an anonymys function which takes the value the of the key as a parameter ~DANIEL
-  
+
   window.requestAnimationFrame(loop);
 };
 
